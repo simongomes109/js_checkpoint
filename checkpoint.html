@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier d'Achat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: wheat;
+        }
+
+        .cart {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            border: 1px solid black;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .cart-item span {
+            margin: 0 10px;
+        }
+
+        button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+            background-color: #f0f0f0;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+
+        .heart {
+            cursor: pointer;
+            font-size: 24px;
+            color: grey;
+            margin-left: 10px;
+            transition: color 0.3s;
+        }
+
+        .heart.liked {
+            color: red;
+        }
+
+        #total {
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cart">
+        <h1>Panier d'Achat</h1>
+        <div class="cart-item">
+            <span>Article 1</span>
+            <button class="minus">-</button>
+            <span class="quantity">1</span>
+            <button class="plus">+</button>
+            <button class="remove">Supprimer</button>
+            <span class="heart">&#9829;</span>
+            <span class="price">10.00</span>
+        </div>
+        <div class="cart-item">
+            <span>Article 2</span>
+            <button class="minus">-</button>
+            <span class="quantity">2</span>
+            <button class="plus">+</button>
+            <button class="remove">Supprimer</button>
+            <span class="heart">&#9829;</span>
+            <span class="price">15.00</span>
+        </div>
+        <div>Total: <span id="total">40.00</span></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            function updateTotal() {
+                let total = 0;
+                document.querySelectorAll('.cart-item').forEach(item => {
+                    const quantity = parseInt(item.querySelector('.quantity').textContent);
+                    const price = parseFloat(item.querySelector('.price').textContent);
+                    total += quantity * price;
+                });
+                document.getElementById('total').textContent = total.toFixed(2);
+            }
+
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const minusBtn = item.querySelector('.minus');
+                const plusBtn = item.querySelector('.plus');
+                const quantityElem = item.querySelector('.quantity');
+                const removeBtn = item.querySelector('.remove');
+                const heartElem = item.querySelector('.heart');
+
+                // Ajuster la quantité
+                minusBtn.addEventListener('click', () => {
+                    let quantity = parseInt(quantityElem.textContent);
+                    if (quantity > 1) {
+                        quantity--;
+                        quantityElem.textContent = quantity;
+                        updateTotal();
+                    }
+                });
+
+                plusBtn.addEventListener('click', () => {
+                    let quantity = parseInt(quantityElem.textContent);
+                    quantity++;
+                    quantityElem.textContent = quantity;
+                    updateTotal();
+                });
+
+                // Supprimer l'article
+                removeBtn.addEventListener('click', () => {
+                    item.remove();
+                    updateTotal();
+                });
+
+                // Aimer l'article
+                heartElem.addEventListener('click', () => {
+                    heartElem.classList.toggle('liked');
+                });
+            });
+
+            // Initialisation du total lors du chargement de la page
+            updateTotal();
+        });
+        alert("Bienvenue dans le panier d'achat!");
+    </script>
+</body>
+</html>
